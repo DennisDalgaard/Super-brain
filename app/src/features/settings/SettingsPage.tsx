@@ -1,12 +1,16 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Check } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { getOpenAIKey, setOpenAIKey } from '@/lib/openai'
 
 export function SettingsPage() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { user, signOut } = useAuth()
+  const [apiKey, setApiKey] = useState(getOpenAIKey() ?? '')
+  const [keySaved, setKeySaved] = useState(false)
 
   const handleLangChange = (lang: string) => {
     i18n.changeLanguage(lang)
@@ -63,6 +67,39 @@ export function SettingsPage() {
             <div className="flex items-center justify-between px-4 py-3.5 text-[15px]">
               <span>{t('theme')}</span>
               <span className="text-text-secondary text-sm">Dark</span>
+            </div>
+          </div>
+        </div>
+
+        {/* AI / OpenAI */}
+        <div className="mb-7">
+          <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-3">AI</h3>
+          <div className="bg-bg-card rounded-lg">
+            <div className="px-4 py-3.5">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[15px]">{t('openai_key')}</span>
+                {keySaved && (
+                  <span className="flex items-center gap-1 text-xs text-emerald-400">
+                    <Check size={14} /> {t('openai_key_saved')}
+                  </span>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="password"
+                  value={apiKey}
+                  onChange={(e) => { setApiKey(e.target.value); setKeySaved(false) }}
+                  placeholder={t('openai_key_placeholder')}
+                  className="flex-1 px-3 py-2 bg-bg-input border border-border text-text-primary rounded-lg text-sm"
+                />
+                <button
+                  onClick={() => { setOpenAIKey(apiKey); setKeySaved(true) }}
+                  className="px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover cursor-pointer border-none transition-colors"
+                >
+                  {t('save')}
+                </button>
+              </div>
+              <p className="text-xs text-text-muted mt-2">{t('openai_key_desc')}</p>
             </div>
           </div>
         </div>

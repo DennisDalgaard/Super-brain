@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft, Plus, ChevronRight, ImageIcon } from 'lucide-react'
+import { ChevronLeft, Plus, ChevronRight, ImageIcon, Loader2 } from 'lucide-react'
 import { useNames } from '@/hooks/useNames'
 import { BottomNav } from '@/components/BottomNav'
 import { SearchBar } from '@/components/SearchBar'
 import { Modal } from '@/components/Modal'
+import { hasOpenAIKey, generateMnemonicImage } from '@/lib/openai'
 import type { Name } from '@/types/database'
 
 const avatarGradients = [
@@ -30,6 +31,8 @@ export function NamesPage() {
   const [newName, setNewName] = useState('')
   const [newMnemonic, setNewMnemonic] = useState('')
   const [saving, setSaving] = useState(false)
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState<string | null>(null)
 
   const filteredNames = useMemo(() => {
     if (!search) return names
@@ -53,6 +56,27 @@ export function NamesPage() {
   const handleDelete = async (id: string) => {
     await deleteName(id)
     setDetailModal(null)
+  }
+
+  const handleAiGenerate = async (name: string, mnemonic: string, onResult: (desc: string, url: string) => void) => {
+    if (!hasOpenAIKey()) {
+      setAiError(t('ai_no_key'))
+      return
+    }
+    if (!mnemonic.trim()) {
+      setAiError(t('ai_need_text'))
+      return
+    }
+    setAiLoading(true)
+    setAiError(null)
+    try {
+      const result = await generateMnemonicImage(name, mnemonic)
+      onResult(result.description, result.imageUrl)
+    } catch (err) {
+      setAiError(err instanceof Error ? err.message : t('ai_error'))
+    } finally {
+      setAiLoading(false)
+    }
   }
 
   const handleUpdate = async () => {
@@ -156,8 +180,32 @@ export function NamesPage() {
             className="w-full px-4 py-3 bg-bg-input border border-border rounded-lg text-text-primary text-[15px] placeholder:text-text-muted resize-y min-h-20"
           />
         </div>
-        <button className="w-full py-3.5 px-5 bg-gradient-to-r from-accent to-purple-500 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:shadow-[0_0_24px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 transition-all cursor-pointer border-none">
-          ⚡ {t('ai_generate')}
+        {aiError && (
+          <p className="text-sm text-danger mb-3">{aiError}</p>
+        )}
+        <button
+          disabled={aiLoading}
+          onClick={() => handleAiGenerate(newName, newMnemonic, async (desc, url) => {
+            // Save the name first, then update with AI data
+            if (!newName.trim()) return
+            setSaving(true)
+            const result = await addName({
+              full_name: newName.trim(),
+              mnemonic_text: newMnemonic.trim() || null,
+              ai_description: desc,
+              ai_image_url: url,
+            })
+            if (result.data) {
+              setNewName('')
+              setNewMnemonic('')
+              setAddModalOpen(false)
+              setAiError(null)
+            }
+            setSaving(false)
+          })}
+          className="w-full py-3.5 px-5 bg-gradient-to-r from-accent to-purple-500 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:shadow-[0_0_24px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 transition-all cursor-pointer border-none disabled:opacity-50"
+        >
+          {aiLoading ? <Loader2 size={18} className="animate-spin" /> : '⚡'} {aiLoading ? t('ai_generating') : t('ai_generate')}
         </button>
       </Modal>
 
@@ -216,6 +264,17 @@ export function NamesPage() {
                 <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wide mb-2">{t('mnemonic')}</h4>
                 <p className="text-[15px] leading-relaxed">{detailModal.mnemonic_text || '—'}</p>
               </div>
+              {detailModal.ai_image_url && (
+                <div className="mb-5">
+                  <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wide mb-2">{t('ai_image_label')}</h4>
+                  <img
+                    src={detailModal.ai_image_url}
+                    alt="AI mnemonic"
+                    className="w-full rounded-xl border border-border"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                  />
+                </div>
+              )}
               {detailModal.ai_description && (
                 <div className="mb-5">
                   <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wide mb-2">{t('ai_description_label')}</h4>
@@ -224,6 +283,27 @@ export function NamesPage() {
                   </div>
                 </div>
               )}
+              {aiError && <p className="text-sm text-danger mb-3">{aiError}</p>}
+              <button
+                disabled={aiLoading}
+                onClick={() => handleAiGenerate(
+                  detailModal.full_name,
+                  detailModal.mnemonic_text ?? '',
+                  async (desc, url) => {
+                    const result = await updateName(detailModal.id, {
+                      ai_description: desc,
+                      ai_image_url: url,
+                    })
+                    if (result.data) {
+                      setDetailModal(result.data)
+                      setAiError(null)
+                    }
+                  }
+                )}
+                className="w-full py-3 px-5 bg-gradient-to-r from-accent to-purple-500 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:shadow-[0_0_24px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 transition-all cursor-pointer border-none disabled:opacity-50 text-sm"
+              >
+                {aiLoading ? <Loader2 size={16} className="animate-spin" /> : '⚡'} {aiLoading ? t('ai_generating') : (detailModal.ai_image_url ? t('ai_generate_image') : t('ai_generate'))}
+              </button>
               <div className="text-xs text-text-muted mt-4 pt-3 border-t border-border">
                 {t('created')}: {new Date(detailModal.created_at).toLocaleDateString()}
               </div>

@@ -73,6 +73,13 @@ const resources = {
       error: 'Der opstod en fejl',
       created: 'Oprettet',
 
+      // AI
+      ai_generating: 'Genererer...',
+      ai_error: 'AI-fejl',
+      ai_no_key: 'Tilføj din OpenAI API-nøgle i Indstillinger',
+      ai_need_text: 'Udfyld huskeregel først',
+      ai_image_expired: 'Billede udløbet – generer igen',
+
       // Settings
       settings: 'Indstillinger',
       profile: 'Profil',
@@ -80,6 +87,10 @@ const resources = {
       theme: 'Tema',
       export_data: 'Eksporter data',
       logout: 'Log ud',
+      openai_key: 'OpenAI API-nøgle',
+      openai_key_placeholder: 'sk-...',
+      openai_key_saved: 'Gemt',
+      openai_key_desc: 'Bruges til AI-billedgenerering. Nøglen gemmes kun i din browser.',
     },
   },
   en: {
@@ -153,6 +164,13 @@ const resources = {
       error: 'An error occurred',
       created: 'Created',
 
+      // AI
+      ai_generating: 'Generating...',
+      ai_error: 'AI error',
+      ai_no_key: 'Add your OpenAI API key in Settings',
+      ai_need_text: 'Fill in the mnemonic first',
+      ai_image_expired: 'Image expired – regenerate',
+
       // Settings
       settings: 'Settings',
       profile: 'Profile',
@@ -160,6 +178,10 @@ const resources = {
       theme: 'Theme',
       export_data: 'Export data',
       logout: 'Log out',
+      openai_key: 'OpenAI API Key',
+      openai_key_placeholder: 'sk-...',
+      openai_key_saved: 'Saved',
+      openai_key_desc: 'Used for AI image generation. The key is only stored in your browser.',
     },
   },
 }

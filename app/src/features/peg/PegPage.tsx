@@ -1,19 +1,22 @@
 import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Loader2 } from 'lucide-react'
 import { usePegEntries } from '@/hooks/usePegEntries'
 import { BottomNav } from '@/components/BottomNav'
 import { SearchBar } from '@/components/SearchBar'
 import { Modal } from '@/components/Modal'
+import { hasOpenAIKey, generateMnemonicImage } from '@/lib/openai'
 
 export function PegPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { entries, filledCount, totalCount, upsertEntry, deleteEntry } = usePegEntries()
   const [search, setSearch] = useState('')
-  const [editModal, setEditModal] = useState<{ number: number; peg_word: string; mnemonic_text: string } | null>(null)
+  const [editModal, setEditModal] = useState<{ number: number; peg_word: string; mnemonic_text: string; ai_description?: string | null; ai_image_url?: string | null } | null>(null)
   const [saving, setSaving] = useState(false)
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState<string | null>(null)
 
   // Build a map of number -> entry
   const entryMap = useMemo(() => {
@@ -41,7 +44,10 @@ export function PegPage() {
       number: num,
       peg_word: existing?.peg_word ?? '',
       mnemonic_text: existing?.mnemonic_text ?? '',
+      ai_description: existing?.ai_description ?? null,
+      ai_image_url: existing?.ai_image_url ?? null,
     })
+    setAiError(null)
   }
 
   const handleSave = async () => {
@@ -51,9 +57,39 @@ export function PegPage() {
       number: editModal.number,
       peg_word: editModal.peg_word.trim(),
       mnemonic_text: editModal.mnemonic_text.trim() || null,
+      ai_description: editModal.ai_description ?? undefined,
+      ai_image_url: editModal.ai_image_url ?? undefined,
     })
     setEditModal(null)
     setSaving(false)
+  }
+
+  const handleAiGenerate = async () => {
+    if (!editModal) return
+    if (!hasOpenAIKey()) {
+      setAiError(t('ai_no_key'))
+      return
+    }
+    const subject = `Number ${editModal.number.toString().padStart(2, '0')} = ${editModal.peg_word}`
+    const mnemonic = editModal.mnemonic_text || editModal.peg_word
+    if (!mnemonic.trim()) {
+      setAiError(t('ai_need_text'))
+      return
+    }
+    setAiLoading(true)
+    setAiError(null)
+    try {
+      const result = await generateMnemonicImage(subject, mnemonic)
+      setEditModal({
+        ...editModal,
+        ai_description: result.description,
+        ai_image_url: result.imageUrl,
+      })
+    } catch (err) {
+      setAiError(err instanceof Error ? err.message : t('ai_error'))
+    } finally {
+      setAiLoading(false)
+    }
   }
 
   const handleDelete = async (num: number) => {
@@ -181,8 +217,28 @@ export function PegPage() {
                 className="w-full px-4 py-3 bg-bg-input border border-border rounded-lg text-text-primary text-[15px] placeholder:text-text-muted resize-y min-h-20"
               />
             </div>
-            <button className="w-full py-3.5 px-5 bg-gradient-to-r from-accent to-purple-500 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:shadow-[0_0_24px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 transition-all cursor-pointer border-none">
-              ⚡ {t('ai_generate')}
+            {editModal.ai_image_url && (
+              <div className="mb-4">
+                <img
+                  src={editModal.ai_image_url}
+                  alt="AI mnemonic"
+                  className="w-full rounded-xl border border-border"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                />
+              </div>
+            )}
+            {editModal.ai_description && (
+              <div className="mb-4 bg-bg-input rounded-xl p-3 border-l-[3px] border-l-accent">
+                <p className="text-sm text-text-secondary leading-relaxed">{editModal.ai_description}</p>
+              </div>
+            )}
+            {aiError && <p className="text-sm text-danger mb-3">{aiError}</p>}
+            <button
+              disabled={aiLoading}
+              onClick={handleAiGenerate}
+              className="w-full py-3.5 px-5 bg-gradient-to-r from-accent to-purple-500 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:shadow-[0_0_24px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 transition-all cursor-pointer border-none disabled:opacity-50"
+            >
+              {aiLoading ? <Loader2 size={18} className="animate-spin" /> : '⚡'} {aiLoading ? t('ai_generating') : t('ai_generate')}
             </button>
           </>
         )}
