@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #0f0f13;
+  --color-bg-secondary: #1a1a24;
+  --color-bg-card: #22223a;
+  --color-bg-card-hover: #2a2a45;
+  --color-bg-input: #16162a;
+  --color-bg-modal: #1e1e32;
+
+  --color-text-primary: #f0f0f5;
+  --color-text-secondary: #9999b3;
+  --color-text-muted: #66668a;
+
+  --color-accent: #6366f1;
+  --color-accent-hover: #818cf8;
+
+  --color-border: #2d2d4a;
+  --color-border-light: #3a3a5c;
+
+  --color-danger: #ef4444;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+/* Animations */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease;
+}
