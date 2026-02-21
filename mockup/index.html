@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperBrain – Memory Techniques App Mockup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ==================== LOGIN SCREEN ==================== -->
+    <div id="screen-login" class="screen active">
+        <div class="login-container">
+            <div class="login-logo">
+                <div class="logo-icon">🧠</div>
+                <h1>SuperBrain</h1>
+                <p class="tagline" data-i18n="login_tagline">Din personlige hukommelsestræner</p>
+            </div>
+
+            <div class="login-form" id="login-form">
+                <div class="form-group">
+                    <label data-i18n="email">E-mail</label>
+                    <input type="email" placeholder="din@email.dk">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="password">Adgangskode</label>
+                    <input type="password" placeholder="••••••••">
+                </div>
+                <button class="btn btn-primary btn-full" onclick="navigateTo('screen-dashboard')" data-i18n="login_btn">Log ind</button>
+                <div class="login-divider">
+                    <span data-i18n="or">eller</span>
+                </div>
+                <button class="btn btn-outline btn-full btn-google">
+                    <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.706A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.962L3.964 7.294C4.672 5.166 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+                    <span data-i18n="login_google">Fortsæt med Google</span>
+                </button>
+                <p class="login-switch" data-i18n="no_account">Har du ikke en konto? <a href="#" onclick="toggleAuth()" data-i18n="signup_link">Opret konto</a></p>
+            </div>
+
+            <div class="login-form hidden" id="signup-form">
+                <div class="form-group">
+                    <label data-i18n="name">Navn</label>
+                    <input type="text" placeholder="Dit navn">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="email">E-mail</label>
+                    <input type="email" placeholder="din@email.dk">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="password">Adgangskode</label>
+                    <input type="password" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="confirm_password">Bekræft adgangskode</label>
+                    <input type="password" placeholder="••••••••">
+                </div>
+                <button class="btn btn-primary btn-full" onclick="navigateTo('screen-dashboard')" data-i18n="signup_btn">Opret konto</button>
+                <p class="login-switch" data-i18n="has_account">Har du allerede en konto? <a href="#" onclick="toggleAuth()" data-i18n="login_link">Log ind</a></p>
+            </div>
+
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="setLang('da')">DA</button>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <div id="screen-dashboard" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo-small">🧠</div>
+                <h2>SuperBrain</h2>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn" onclick="toggleLangMenu()" title="Sprog">
+                    <span class="lang-indicator">DA</span>
+                </button>
+                <button class="icon-btn" onclick="navigateTo('screen-settings')" title="Indstillinger">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                </button>
+                <div class="avatar" onclick="navigateTo('screen-login')">D</div>
+            </div>
+        </header>
+
+        <main class="dashboard-content">
+            <div class="welcome-section">
+                <h1 data-i18n="welcome">Velkommen tilbage, Dennis 👋</h1>
+                <p data-i18n="welcome_sub">Hvad vil du træne i dag?</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card" onclick="navigateTo('screen-names')">
+                    <div class="feature-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <h3 data-i18n="names_title">Navneliste</h3>
+                    <p data-i18n="names_desc">Husk navne med visuelle huskregler</p>
+                    <span class="feature-count">12 <span data-i18n="names_count">navne</span></span>
+                </div>
+
+                <div class="feature-card" onclick="navigateTo('screen-peg')">
+                    <div class="feature-icon" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
+                    </div>
+                    <h3 data-i18n="peg_title">Number PEG</h3>
+                    <p data-i18n="peg_desc">00-99 tal-associations-system</p>
+                    <span class="feature-count">34/100 <span data-i18n="peg_count">udfyldt</span></span>
+                </div>
+
+                <div class="feature-card" onclick="navigateTo('screen-notes')">
+                    <div class="feature-icon" style="background: linear-gradient(135deg, #10b981, #06b6d4);">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+                    </div>
+                    <h3 data-i18n="notes_title">Noter</h3>
+                    <p data-i18n="notes_desc">Gem dine hukommelsesteknikker</p>
+                    <span class="feature-count">5 <span data-i18n="notes_count">noter</span></span>
+                </div>
+            </div>
+
+            <div class="quick-stats">
+                <h2 data-i18n="stats_title">Din fremgang</h2>
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="stat-number">12</span>
+                        <span class="stat-label" data-i18n="stat_names">Navne husket</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">34%</span>
+                        <span class="stat-label" data-i18n="stat_peg">PEG-liste</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">5</span>
+                        <span class="stat-label" data-i18n="stat_notes">Teknikker gemt</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="navigateTo('screen-dashboard')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                <span data-i18n="nav_home">Hjem</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('screen-names')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span data-i18n="nav_names">Navne</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('screen-peg')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
+                <span data-i18n="nav_peg">PEG</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('screen-notes')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                <span data-i18n="nav_notes">Noter</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- ==================== NAME LIST SCREEN ==================== -->
+    <div id="screen-names" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <button class="icon-btn" onclick="navigateTo('screen-dashboard')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+                </button>
+                <h2 data-i18n="names_title">Navneliste</h2>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn" onclick="openModal('modal-add-name')">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="search-container">
+            <div class="search-box">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" data-i18n-placeholder="search_names" placeholder="Søg i navne..." id="name-search" oninput="filterNames()">
+            </div>
+        </div>
+
+        <div class="list-container" id="names-list">
+            <div class="name-card" onclick="openModal('modal-name-detail')">
+                <div class="name-avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">A</div>
+                <div class="name-info">
+                    <h3>Anders Jensen</h3>
+                    <p class="mnemonic-preview">En <strong>and</strong> der spiser <strong>jensens</strong> bøfgryde</p>
+                </div>
+                <div class="name-actions">
+                    <div class="ai-badge" title="AI-billede genereret">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+                    </div>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+                </div>
+            </div>
+
+            <div class="name-card">
+                <div class="name-avatar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">M</div>
+                <div class="name-info">
+                    <h3>Maria Larsen</h3>
+                    <p class="mnemonic-preview"><strong>Maria</strong> fra Sound of Music i en <strong>larve</strong>-dragt</p>
+                </div>
+                <div class="name-actions">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+                </div>
+            </div>
+
+            <div class="name-card">
+                <div class="name-avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">P</div>
+                <div class="name-info">
+                    <h3>Peter Andersen</h3>
+                    <p class="mnemonic-preview"><strong>Peter</strong> Pan der flyver med <strong>ænder</strong></p>
+                </div>
+                <div class="name-actions">
+                    <div class="ai-badge" title="AI-billede genereret">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+                    </div>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+                </div>
+            </div>
+
+            <div class="name-card">
+                <div class="name-avatar" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">S</div>
+                <div class="name-info">
+                    <h3>Sofie Holm</h3>
+                    <p class="mnemonic-preview">En <strong>sofa</strong> på en lille <strong>holm</strong> i havet</p>
+                </div>
+                <div class="name-actions">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <button class="fab" onclick="openModal('modal-add-name')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+
+        <nav class="bottom-nav">
+            <button class="nav-item" onclick="navigateTo('screen-dashboard')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                <span data-i18n="nav_home">Hjem</span>
+            </button>
+            <button class="nav-item active" onclick="navigateTo('screen-names')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span data-i18n="nav_names">Navne</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('screen-peg')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
+                <span data-i18n="nav_peg">PEG</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('screen-notes')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                <span data-i18n="nav_notes">Noter</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- ==================== NUMBER PEG LIST SCREEN ==================== -->
+    <div id="screen-peg" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <button class="icon-btn" onclick="navigateTo('screen-dashboard')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+                </button>
+                <h2>Number PEG System</h2>
+            </div>
+            <div class="header-right">
+                <span class="progress-badge">34/100</span>
+            </div>
+        </header>
+
+        <div class="peg-progress-bar">
+            <div class="peg-progress-fill" style="width: 34%"></div>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" data-i18n-placeholder="search_number" placeholder="Søg tal (00-99)..." id="peg-search">
+            </div>
+        </div>
+
+        <div class="peg-grid" id="peg-grid">
+            <div class="peg-card filled" onclick="openModal('modal-peg-detail')">
+                <span class="peg-number">00</span>
+                <span class="peg-word">Isse</span>
+                <div class="peg-mnemonic">S-S = Isse (toppen af hovedet)</div>
+            </div>
+            <div class="peg-card filled">
+                <span class="peg-number">01</span>
+                <span class="peg-word">Sæd</span>
+                <div class="peg-mnemonic">S-D = Sæd (frø der spirer)</div>
+            </div>
+            <div class="peg-card filled">
+                <span class="peg-number">02</span>
+                <span class="peg-word">Sun</span>
+                <div class="peg-mnemonic">S-N = Sun (en lysende sol)</div>
+            </div>
+            <div class="peg-card filled">
+                <span class="peg-number">03</span>
+                <span class="peg-word">Sam</span>
+                <div class="peg-mnemonic">S-M = Sam (Frodo's ven)</div>
+            </div>
+            <div class="peg-card empty">
+                <span class="peg-number">04</span>
+                <span class="peg-empty-label" data-i18n="peg_add">+ Tilføj</span>
+            </div>
+            <div class="peg-card empty">
+                <span class="peg-number">05</span>
+                <span class="peg-empty-label" data-i18n="peg_add">+ Tilføj</span>
+            </div>
+            <div class="peg-card filled">
+                <span class="peg-number">06</span>
+                <span class="peg-word">Sushi</span>
+                <div class="peg-mnemonic">S-SH = Sushi</div>
+            </div>
+            <div class="peg-card empty">
+                <span class="peg-number">07</span>
+                <span class="peg-empty-label" data-i18n="peg_add">+ Tilføj</span>
+            </div>
+            <div class="peg-card filled">
+                <span class="peg-number">08</span>
+                <span class="peg-word">Safe</span>
+                <div class="peg-mnemonic">S-F = Safe (pengeskab)</div>
+            </div>
+            <div class="peg-card empty">
+                <span class="peg-number">09</span>
+                <span class="peg-empty-label" data-i18n="peg_add">+ Tilføj</span>
+            </div>
+            <div class="peg-card filled">
+                <span class="peg-number">10</span>
+                <span class="peg-word">Dåse</span>
+                <div class="peg-mnemonic">D-S = Dåse (konserves)</div>
+            </div>
+            <div class="peg-card filled">
+                <span class="peg-number">11</span>
+                <span class="peg-word">Dad</span>
+                <div class="peg-mnemonic">D-D = Dad (far)</div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-item" onclick="navigateTo('screen-dashboard')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                <span data-i18n="nav_home">Hjem</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('screen-names')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span data-i18n="nav_names">Navne</span>
+            </button>
+            <button class="nav-item active" onclick="navigateTo('screen-peg')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
+                <span data-i18n="nav_peg">PEG</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('screen-notes')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                <span data-i18n="nav_notes">Noter</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- ==================== NOTES SCREEN ==================== -->
+    <div id="screen-notes" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <button class="icon-btn" onclick="navigateTo('screen-dashboard')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+                </button>
+                <h2 data-i18n="notes_title">Noter</h2>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn" onclick="openModal('modal-add-note')">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="search-container">
+            <div class="search-box">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" data-i18n-placeholder="search_notes" placeholder="Søg i noter...">
+            </div>
+        </div>
+
+        <div class="notes-list">
+            <div class="note-card" onclick="openModal('modal-note-detail')">
+                <div class="note-category" style="background: #6366f1;">Teknik</div>
+                <h3>Memory Palace (Loci-metoden)</h3>
+                <p class="note-preview">Forestil dig et velkendt sted (dit hjem, en rute du kender). Placer de ting du vil huske på specifikke lokationer...</p>
+                <div class="note-meta">
+                    <span>21. feb 2026</span>
+                </div>
+            </div>
+
+            <div class="note-card">
+                <div class="note-category" style="background: #f59e0b;">Teknik</div>
+                <h3>Kædesystemet (Link Method)</h3>
+                <p class="note-preview">Forbind hvert element i en liste med det næste via en overdreven, visuel historie. Jo mere absurd, jo bedre...</p>
+                <div class="note-meta">
+                    <span>19. feb 2026</span>
+                </div>
+            </div>
+
+            <div class="note-card">
+                <div class="note-category" style="background: #10b981;">System</div>
+                <h3>Major System - Konsonant-koder</h3>
+                <p class="note-preview">0=S/Z, 1=D/T, 2=N, 3=M, 4=R, 5=L, 6=SH/CH, 7=K/G, 8=F/V, 9=P/B. Vokaler tæller ikke...</p>
+                <div class="note-meta">
+                    <span>15. feb 2026</span>
+                </div>
+            </div>
+
+            <div class="note-card">
+                <div class="note-category" style="background: #ec4899;">Tips</div>
+                <h3>Navne-husketeknik</h3>
+                <p class="note-preview">1. Lyt aktivt til navnet. 2. Gentag det med det samme. 3. Lav en visuel association. 4. Forbind det med nogen du kender...</p>
+                <div class="note-meta">
+                    <span>12. feb 2026</span>
+                </div>
+            </div>
+
+            <div class="note-card">
+                <div class="note-category" style="background: #06b6d4;">Øvelse</div>
+                <h3>Daglig hukommelsestræning</h3>
+                <p class="note-preview">Morgen: Gennemgå gårsdagens PEG-tal. Middag: Øv 5 nye navne. Aften: Skriv dagens vigtigste ting i memory palace...</p>
+                <div class="note-meta">
+                    <span>10. feb 2026</span>
+                </div>
+            </div>
+        </div>
+
+        <button class="fab" onclick="openModal('modal-add-note')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+
+        <nav class="bottom-nav">
+            <button class="nav-item" onclick="navigateTo('screen-dashboard')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                <span data-i18n="nav_home">Hjem</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('screen-names')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span data-i18n="nav_names">Navne</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('screen-peg')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
+                <span data-i18n="nav_peg">PEG</span>
+            </button>
+            <button class="nav-item active" onclick="navigateTo('screen-notes')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                <span data-i18n="nav_notes">Noter</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Add Name Modal -->
+    <div id="modal-add-name" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n="add_name">Tilføj navn</h2>
+                <button class="icon-btn" onclick="closeModal('modal-add-name')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label data-i18n="full_name">Fulde navn</label>
+                    <input type="text" placeholder="F.eks. Anders Jensen" id="input-name">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="mnemonic">Huskeregel</label>
+                    <textarea placeholder="F.eks. En AND der spiser JENSENs bøfgryde" rows="3" id="input-mnemonic"></textarea>
+                </div>
+                <div class="ai-section">
+                    <button class="btn btn-ai" onclick="simulateAI()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg>
+                        <span data-i18n="ai_generate">Generer visuelt indtryk med AI</span>
+                    </button>
+                    <div class="ai-result hidden" id="ai-result">
+                        <div class="ai-text-result">
+                            <p class="ai-label">AI Beskrivelse:</p>
+                            <p class="ai-description">Forestil dig en stor, hvid <strong>and</strong> der sidder ved et spisebord. Foran anden står en dampende gryde med <strong>Jensens</strong> bøfgryde. Anden har en kok-hat på og spiser med stor appetit, mens sovsen sprøjter ud til alle sider.</p>
+                        </div>
+                        <div class="ai-image-section">
+                            <button class="btn btn-outline btn-sm" data-i18n="ai_gen_image">🎨 Generer billede</button>
+                            <div class="ai-image-placeholder">
+                                <div class="placeholder-shimmer"></div>
+                                <span data-i18n="ai_image_preview">AI-genereret billede vises her</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modal-add-name')" data-i18n="cancel">Annuller</button>
+                <button class="btn btn-primary" onclick="closeModal('modal-add-name')" data-i18n="save">Gem</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Name Detail Modal -->
+    <div id="modal-name-detail" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Anders Jensen</h2>
+                <button class="icon-btn" onclick="closeModal('modal-name-detail')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-section">
+                    <h4 data-i18n="mnemonic">Huskeregel</h4>
+                    <p>En <strong>and</strong> der spiser <strong>Jensens</strong> bøfgryde</p>
+                </div>
+                <div class="detail-section">
+                    <h4 data-i18n="ai_description">AI Beskrivelse</h4>
+                    <p>Forestil dig en stor, hvid and der sidder ved et spisebord. Foran anden står en dampende gryde med Jensens bøfgryde. Anden har en kok-hat på og spiser med stor appetit.</p>
+                </div>
+                <div class="detail-section">
+                    <h4 data-i18n="ai_image">AI Billede</h4>
+                    <div class="detail-image-placeholder">
+                        <div class="img-placeholder-content">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+                            <span>AI-genereret billede af en and med kok-hat</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-meta">
+                    <span data-i18n="created">Oprettet: 21. feb 2026</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger-outline" data-i18n="delete">Slet</button>
+                <button class="btn btn-primary" data-i18n="edit">Rediger</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PEG Detail Modal -->
+    <div id="modal-peg-detail" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="peg-detail-number">00</div>
+                <button class="icon-btn" onclick="closeModal('modal-peg-detail')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label data-i18n="peg_word">PEG-ord</label>
+                    <input type="text" value="Isse" placeholder="Indtast PEG-ord">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="consonant_code">Konsonant-kode</label>
+                    <div class="consonant-display">S - S</div>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="mnemonic">Huskeregel</label>
+                    <textarea rows="3" placeholder="Beskriv dit mentale billede...">S-S = Isse (toppen af hovedet). Forestil dig en skinnende isse der reflekterer solen.</textarea>
+                </div>
+                <div class="ai-section">
+                    <button class="btn btn-ai">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg>
+                        <span data-i18n="ai_generate">Generer visuelt indtryk med AI</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modal-peg-detail')" data-i18n="cancel">Annuller</button>
+                <button class="btn btn-primary" onclick="closeModal('modal-peg-detail')" data-i18n="save">Gem</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Detail Modal -->
+    <div id="modal-note-detail" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Memory Palace (Loci-metoden)</h2>
+                <button class="icon-btn" onclick="closeModal('modal-note-detail')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="note-category-tag" style="background: #6366f1;">Teknik</div>
+                <div class="note-full-content">
+                    <p>Forestil dig et velkendt sted (dit hjem, en rute du kender). Placer de ting du vil huske på specifikke lokationer langs denne rute.</p>
+                    <h4>Sådan gør du:</h4>
+                    <ol>
+                        <li>Vælg et sted du kender rigtig godt (f.eks. dit barndomshjem)</li>
+                        <li>Definer en fast rute gennem stedet (f.eks. hoveddør → entré → stue → køkken)</li>
+                        <li>Placer hvert element du vil huske på en specifik lokation</li>
+                        <li>Gør billederne store, farverige og absurde</li>
+                        <li>Gå ruten igennem mentalt for at genkalde</li>
+                    </ol>
+                    <h4>Eksempel:</h4>
+                    <p>Du skal huske en indkøbsliste: mælk, brød, æbler, ost.</p>
+                    <ul>
+                        <li><strong>Hoveddør:</strong> En kæmpe mælkekarton blokerer døren</li>
+                        <li><strong>Entré:</strong> Gulvet er dækket af brødskiver</li>
+                        <li><strong>Stue:</strong> Sofaen er lavet af gigantiske æbler</li>
+                        <li><strong>Køkken:</strong> Vandhanen sprøjter smeltet ost</li>
+                    </ul>
+                </div>
+                <div class="detail-meta">
+                    <span>Oprettet: 21. feb 2026</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger-outline" data-i18n="delete">Slet</button>
+                <button class="btn btn-primary" data-i18n="edit">Rediger</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Note Modal -->
+    <div id="modal-add-note" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 data-i18n="add_note">Ny note</h2>
+                <button class="icon-btn" onclick="closeModal('modal-add-note')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label data-i18n="note_category">Kategori</label>
+                    <div class="category-pills">
+                        <button class="pill active">Teknik</button>
+                        <button class="pill">System</button>
+                        <button class="pill">Tips</button>
+                        <button class="pill">Øvelse</button>
+                        <button class="pill pill-add">+ Ny</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="note_title_label">Titel</label>
+                    <input type="text" placeholder="Navn på teknikken...">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="note_content">Indhold</label>
+                    <div class="editor-toolbar">
+                        <button class="toolbar-btn" title="Bold"><strong>B</strong></button>
+                        <button class="toolbar-btn" title="Italic"><em>I</em></button>
+                        <button class="toolbar-btn" title="Heading">H</button>
+                        <button class="toolbar-btn" title="Liste">☰</button>
+                        <button class="toolbar-btn" title="Nummereret liste">1.</button>
+                    </div>
+                    <textarea rows="10" placeholder="Skriv din note her..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modal-add-note')" data-i18n="cancel">Annuller</button>
+                <button class="btn btn-primary" onclick="closeModal('modal-add-note')" data-i18n="save">Gem</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Screen (simplified) -->
+    <div id="screen-settings" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <button class="icon-btn" onclick="navigateTo('screen-dashboard')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+                </button>
+                <h2 data-i18n="settings">Indstillinger</h2>
+            </div>
+        </header>
+        <div class="settings-content">
+            <div class="settings-group">
+                <h3 data-i18n="settings_profile">Profil</h3>
+                <div class="settings-item">
+                    <span data-i18n="name">Navn</span>
+                    <span class="settings-value">Dennis Dalgaard</span>
+                </div>
+                <div class="settings-item">
+                    <span data-i18n="email">E-mail</span>
+                    <span class="settings-value">dennis@email.dk</span>
+                </div>
+            </div>
+            <div class="settings-group">
+                <h3 data-i18n="settings_app">App</h3>
+                <div class="settings-item">
+                    <span data-i18n="language">Sprog</span>
+                    <select class="settings-select" onchange="setLang(this.value)">
+                        <option value="da">Dansk</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <div class="settings-item">
+                    <span data-i18n="theme">Tema</span>
+                    <span class="settings-value">Mørkt</span>
+                </div>
+            </div>
+            <div class="settings-group">
+                <h3 data-i18n="settings_data">Data</h3>
+                <div class="settings-item">
+                    <span data-i18n="export_data">Eksporter data</span>
+                    <button class="btn btn-outline btn-sm">JSON</button>
+                </div>
+            </div>
+            <button class="btn btn-danger-outline btn-full" onclick="navigateTo('screen-login')" data-i18n="logout">Log ud</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
