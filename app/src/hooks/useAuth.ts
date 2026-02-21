@@ -48,7 +48,7 @@ export function useAuth() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/super-brain/`,
+        redirectTo: `${window.location.origin}/Super-brain/`,
       },
     })
     return { data, error }

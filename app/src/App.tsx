@@ -30,7 +30,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <BrowserRouter basename="/super-brain">
+    <BrowserRouter basename="/Super-brain">
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
