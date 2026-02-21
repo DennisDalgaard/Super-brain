@@ -9,7 +9,7 @@ import { Modal } from '@/components/Modal'
 import { hasOpenAIKey, generateMnemonicImage } from '@/lib/openai'
 
 export function PegPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { entries, filledCount, totalCount, upsertEntry, deleteEntry } = usePegEntries()
   const [search, setSearch] = useState('')
@@ -79,7 +79,7 @@ export function PegPage() {
     setAiLoading(true)
     setAiError(null)
     try {
-      const result = await generateMnemonicImage(subject, mnemonic)
+      const result = await generateMnemonicImage(subject, mnemonic, i18n.language)
       setEditModal({
         ...editModal,
         ai_description: result.description,

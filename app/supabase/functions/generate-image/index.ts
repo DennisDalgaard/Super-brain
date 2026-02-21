@@ -35,7 +35,7 @@ Deno.serve(async (req) => {
       })
     }
 
-    const { openai_key, subject, mnemonic } = await req.json()
+    const { openai_key, subject, mnemonic, language } = await req.json()
 
     if (!openai_key) {
       return new Response(JSON.stringify({ error: 'Missing OpenAI API key' }), {
@@ -51,9 +51,11 @@ Deno.serve(async (req) => {
       })
     }
 
+    const langName = language === 'da' ? 'Danish' : 'English'
+
     // Step 1: Generate a vivid visual description using GPT
     const descriptionPrompt = `You are a memory technique expert. Create a short, vivid, memorable visual scene (2-3 sentences) that helps remember "${subject}" using the mnemonic: "${mnemonic}".
-Make it bizarre, exaggerated and colorful - the weirder the better for memory. Write in the same language as the mnemonic text.`
+Make it bizarre, exaggerated and colorful - the weirder the better for memory. You MUST write your response in ${langName}.`
 
     const chatRes = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',

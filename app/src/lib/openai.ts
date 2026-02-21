@@ -26,6 +26,7 @@ interface ImageGenerationResult {
 export async function generateMnemonicImage(
   subject: string,
   mnemonicText: string,
+  language: string = 'da',
 ): Promise<ImageGenerationResult> {
   const apiKey = getOpenAIKey()
   if (!apiKey) throw new Error('OpenAI API key not configured')
@@ -35,6 +36,7 @@ export async function generateMnemonicImage(
       openai_key: apiKey,
       subject,
       mnemonic: mnemonicText,
+      language,
     },
   })
 

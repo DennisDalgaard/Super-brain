@@ -19,7 +19,7 @@ const avatarGradients = [
 ]
 
 export function NamesPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { names, addName, updateName, deleteName } = useNames()
   const [search, setSearch] = useState('')
@@ -70,7 +70,7 @@ export function NamesPage() {
     setAiLoading(true)
     setAiError(null)
     try {
-      const result = await generateMnemonicImage(name, mnemonic)
+      const result = await generateMnemonicImage(name, mnemonic, i18n.language)
       onResult(result.description, result.imageUrl)
     } catch (err) {
       setAiError(err instanceof Error ? err.message : t('ai_error'))
