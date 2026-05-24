@@ -15,19 +15,28 @@ export function BottomNav() {
   const navigate = useNavigate()
 
   return (
-    <nav className="flex bg-bg-secondary border-t border-border h-16 shrink-0">
+    <nav
+      className="glass-nav flex h-16 shrink-0"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+    >
       {navItems.map(item => {
         const isActive = location.pathname === item.path
         return (
           <button
             key={item.path}
             onClick={() => navigate(item.path)}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 text-[11px] font-medium transition-colors border-none bg-transparent cursor-pointer ${
-              isActive ? 'text-accent' : 'text-text-muted hover:text-text-primary'
+            className={`flex-1 flex flex-col items-center justify-center gap-1 text-[11px] font-medium transition-colors border-none bg-transparent cursor-pointer min-h-[44px] ${
+              isActive ? 'text-text-primary' : 'text-text-muted hover:text-text-primary'
             }`}
           >
-            <item.icon size={22} />
-            <span>{t(item.labelKey)}</span>
+            <span
+              className={`relative flex items-center justify-center w-10 h-7 rounded-full transition-colors ${
+                isActive ? 'bg-[rgba(79,124,255,0.18)] text-[#9CB6FF]' : ''
+              }`}
+            >
+              <item.icon size={20} strokeWidth={isActive ? 2.4 : 2} />
+            </span>
+            <span className={isActive ? 'text-[#9CB6FF]' : ''}>{t(item.labelKey)}</span>
           </button>
         )
       })}

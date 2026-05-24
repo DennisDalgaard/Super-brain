@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/hooks/useAuth'
+import { Logo } from '@/components/Logo'
 
 export function LoginPage() {
   const { t, i18n } = useTranslation()
@@ -48,18 +49,21 @@ export function LoginPage() {
     <div className="flex flex-col items-center justify-center min-h-screen px-6 py-8">
       {/* Logo */}
       <div className="text-center mb-10">
-        <div className="text-6xl mb-3 drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]">🧠</div>
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-accent via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-          SuperBrain
+        <div className="flex justify-center mb-4">
+          <Logo size={84} />
+        </div>
+        <h1 className="text-[34px] leading-none font-semibold tracking-tight">
+          <span className="text-text-primary">Super</span>
+          <span className="brand-text-gradient">Brain</span>
         </h1>
-        <p className="text-text-secondary text-sm mt-2">{t('login_tagline')}</p>
+        <p className="text-text-secondary text-sm mt-2.5">{t('login_tagline')}</p>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="w-full max-w-[360px]">
+      <form onSubmit={handleSubmit} className="w-full max-w-[360px] glass-card p-6">
         {isSignUp && (
           <div className="mb-4">
-            <label className="block text-xs font-medium text-text-secondary mb-1.5 uppercase tracking-wide">
+            <label className="block text-[11px] font-semibold text-text-secondary mb-1.5 uppercase tracking-[0.08em]">
               {t('name')}
             </label>
             <input
@@ -68,13 +72,13 @@ export function LoginPage() {
               onChange={(e) => setName(e.target.value)}
               placeholder="Dit navn"
               required
-              className="w-full px-4 py-3 bg-bg-input border border-border rounded-lg text-text-primary text-[15px] placeholder:text-text-muted transition-colors"
+              className="w-full px-4 py-3 glass-input rounded-2xl text-[15px] min-h-[48px]"
             />
           </div>
         )}
 
         <div className="mb-4">
-          <label className="block text-xs font-medium text-text-secondary mb-1.5 uppercase tracking-wide">
+          <label className="block text-[11px] font-semibold text-text-secondary mb-1.5 uppercase tracking-[0.08em]">
             {t('email')}
           </label>
           <input
@@ -83,12 +87,12 @@ export function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="din@email.dk"
             required
-            className="w-full px-4 py-3 bg-bg-input border border-border rounded-lg text-text-primary text-[15px] placeholder:text-text-muted transition-colors"
+            className="w-full px-4 py-3 glass-input rounded-2xl text-[15px] min-h-[48px]"
           />
         </div>
 
         <div className="mb-4">
-          <label className="block text-xs font-medium text-text-secondary mb-1.5 uppercase tracking-wide">
+          <label className="block text-[11px] font-semibold text-text-secondary mb-1.5 uppercase tracking-[0.08em]">
             {t('password')}
           </label>
           <input
@@ -97,13 +101,13 @@ export function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
             required
-            className="w-full px-4 py-3 bg-bg-input border border-border rounded-lg text-text-primary text-[15px] placeholder:text-text-muted transition-colors"
+            className="w-full px-4 py-3 glass-input rounded-2xl text-[15px] min-h-[48px]"
           />
         </div>
 
         {isSignUp && (
           <div className="mb-4">
-            <label className="block text-xs font-medium text-text-secondary mb-1.5 uppercase tracking-wide">
+            <label className="block text-[11px] font-semibold text-text-secondary mb-1.5 uppercase tracking-[0.08em]">
               {t('confirm_password')}
             </label>
             <input
@@ -112,13 +116,13 @@ export function LoginPage() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="w-full px-4 py-3 bg-bg-input border border-border rounded-lg text-text-primary text-[15px] placeholder:text-text-muted transition-colors"
+              className="w-full px-4 py-3 glass-input rounded-2xl text-[15px] min-h-[48px]"
             />
           </div>
         )}
 
         {error && (
-          <div className="mb-4 p-3 bg-danger/10 border border-danger/30 rounded-lg text-danger text-sm">
+          <div className="mb-4 p-3 bg-[rgba(255,77,77,0.1)] border border-[rgba(255,77,77,0.3)] rounded-2xl text-danger text-sm">
             {error}
           </div>
         )}
@@ -126,21 +130,21 @@ export function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 px-6 bg-accent hover:bg-accent-hover text-white font-medium rounded-lg transition-all hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] disabled:opacity-50 cursor-pointer border-none text-[15px]"
+          className="w-full py-3.5 px-6 btn-brand rounded-full font-medium cursor-pointer text-[15px] min-h-[48px]"
         >
           {loading ? t('loading') : isSignUp ? t('signup') : t('login')}
         </button>
 
         <div className="flex items-center my-5 text-text-muted text-[13px]">
-          <div className="flex-1 h-px bg-border" />
+          <div className="flex-1 h-px bg-[rgba(123,92,255,0.18)]" />
           <span className="px-4">{t('or')}</span>
-          <div className="flex-1 h-px bg-border" />
+          <div className="flex-1 h-px bg-[rgba(123,92,255,0.18)]" />
         </div>
 
         <button
           type="button"
           onClick={handleGoogleLogin}
-          className="w-full py-3 px-6 bg-transparent border border-border text-text-primary font-medium rounded-lg flex items-center justify-center gap-2.5 hover:bg-bg-card hover:border-border-light transition-colors cursor-pointer text-[15px]"
+          className="w-full py-3 px-6 btn-ghost rounded-full font-medium flex items-center justify-center gap-2.5 cursor-pointer text-[15px] min-h-[48px]"
         >
           <svg width="18" height="18" viewBox="0 0 18 18">
             <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
@@ -156,7 +160,7 @@ export function LoginPage() {
           <button
             type="button"
             onClick={() => { setIsSignUp(!isSignUp); setError('') }}
-            className="text-accent hover:text-accent-hover bg-transparent border-none cursor-pointer font-medium text-sm"
+            className="brand-text-gradient bg-transparent border-none cursor-pointer font-semibold text-sm"
           >
             {isSignUp ? t('login') : t('signup')}
           </button>
@@ -169,10 +173,10 @@ export function LoginPage() {
           <button
             key={lang}
             onClick={() => setLang(lang)}
-            className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium border cursor-pointer transition-colors ${
+            className={`px-4 py-1.5 rounded-full text-[13px] font-medium border cursor-pointer transition-colors min-h-[36px] ${
               i18n.language === lang
-                ? 'bg-accent border-accent text-white'
-                : 'bg-transparent border-border text-text-secondary hover:border-border-light'
+                ? 'brand-gradient border-transparent text-white'
+                : 'bg-transparent border-[rgba(123,92,255,0.22)] text-text-secondary hover:border-[rgba(123,92,255,0.4)]'
             }`}
           >
             {lang.toUpperCase()}

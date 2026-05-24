@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft, Check } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { getOpenAIKey, setOpenAIKey } from '@/lib/openai'
+import { AppHeader } from '@/components/AppHeader'
 
 export function SettingsPage() {
   const { t, i18n } = useTranslation()
@@ -24,106 +25,111 @@ export function SettingsPage() {
 
   return (
     <div className="flex flex-col h-screen max-w-[480px] mx-auto">
-      <header className="flex items-center px-4 py-3 h-14 bg-bg-secondary border-b border-border shrink-0">
-        <button onClick={() => navigate('/')} className="p-2 rounded-lg text-text-secondary hover:bg-bg-card hover:text-text-primary transition-colors bg-transparent border-none cursor-pointer">
-          <ChevronLeft size={20} />
-        </button>
-        <h2 className="text-lg font-semibold ml-2">{t('settings')}</h2>
-      </header>
+      <AppHeader back title={t('settings')} />
 
-      <div className="flex-1 overflow-y-auto px-4 py-5">
+      <div className="flex-1 overflow-y-auto px-4 py-5 pb-10">
         {/* Profile */}
-        <div className="mb-7">
-          <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-3">{t('profile')}</h3>
-          <div className="bg-bg-card rounded-lg">
-            <div className="flex items-center justify-between px-4 py-3.5 text-[15px]">
-              <span>{t('name')}</span>
-              <span className="text-text-secondary text-sm">{user?.user_metadata?.full_name || '—'}</span>
-            </div>
-            <div className="h-px bg-border mx-4" />
-            <div className="flex items-center justify-between px-4 py-3.5 text-[15px]">
-              <span>{t('email')}</span>
-              <span className="text-text-secondary text-sm">{user?.email || '—'}</span>
-            </div>
-          </div>
-        </div>
+        <Section title={t('profile')}>
+          <Row label={t('name')} value={user?.user_metadata?.full_name || '—'} />
+          <Divider />
+          <Row label={t('email')} value={user?.email || '—'} />
+        </Section>
 
         {/* App settings */}
-        <div className="mb-7">
-          <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-3">{t('settings')}</h3>
-          <div className="bg-bg-card rounded-lg">
-            <div className="flex items-center justify-between px-4 py-3.5 text-[15px]">
-              <span>{t('language')}</span>
-              <select
-                value={i18n.language}
-                onChange={(e) => handleLangChange(e.target.value)}
-                className="bg-bg-input border border-border text-text-primary px-3 py-1.5 rounded-lg text-sm"
-              >
-                <option value="da">Dansk</option>
-                <option value="en">English</option>
-              </select>
-            </div>
-            <div className="h-px bg-border mx-4" />
-            <div className="flex items-center justify-between px-4 py-3.5 text-[15px]">
-              <span>{t('theme')}</span>
-              <span className="text-text-secondary text-sm">Dark</span>
+        <Section title={t('settings')}>
+          <div className="flex items-center justify-between px-4 py-3.5 text-[15px] min-h-[52px]">
+            <span className="text-text-primary">{t('language')}</span>
+            <div className="flex gap-1.5">
+              {['da', 'en'].map(lang => (
+                <button
+                  key={lang}
+                  onClick={() => handleLangChange(lang)}
+                  className={`px-3.5 py-1.5 rounded-full text-[13px] font-semibold border cursor-pointer transition-colors min-h-[36px] ${
+                    i18n.language === lang
+                      ? 'brand-gradient border-transparent text-white'
+                      : 'bg-transparent border-[rgba(123,92,255,0.22)] text-text-secondary hover:border-[rgba(123,92,255,0.4)]'
+                  }`}
+                >
+                  {lang.toUpperCase()}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
+          <Divider />
+          <Row label={t('theme')} value="Dark" />
+        </Section>
 
         {/* AI / OpenAI */}
-        <div className="mb-7">
-          <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-3">AI</h3>
-          <div className="bg-bg-card rounded-lg">
-            <div className="px-4 py-3.5">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[15px]">{t('openai_key')}</span>
-                {keySaved && (
-                  <span className="flex items-center gap-1 text-xs text-emerald-400">
-                    <Check size={14} /> {t('openai_key_saved')}
-                  </span>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <input
-                  type="password"
-                  value={apiKey}
-                  onChange={(e) => { setApiKey(e.target.value); setKeySaved(false) }}
-                  placeholder={t('openai_key_placeholder')}
-                  className="flex-1 px-3 py-2 bg-bg-input border border-border text-text-primary rounded-lg text-sm"
-                />
-                <button
-                  onClick={() => { setOpenAIKey(apiKey); setKeySaved(true) }}
-                  className="px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover cursor-pointer border-none transition-colors"
-                >
-                  {t('save')}
-                </button>
-              </div>
-              <p className="text-xs text-text-muted mt-2">{t('openai_key_desc')}</p>
+        <Section title="AI">
+          <div className="px-4 py-4">
+            <div className="flex items-center justify-between mb-2.5">
+              <span className="text-[15px] text-text-primary">{t('openai_key')}</span>
+              {keySaved && (
+                <span className="flex items-center gap-1 text-xs text-[#33D6FF]">
+                  <Check size={14} /> {t('openai_key_saved')}
+                </span>
+              )}
             </div>
-          </div>
-        </div>
-
-        {/* Data */}
-        <div className="mb-7">
-          <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-3">Data</h3>
-          <div className="bg-bg-card rounded-lg">
-            <div className="flex items-center justify-between px-4 py-3.5 text-[15px]">
-              <span>{t('export_data')}</span>
-              <button className="px-3.5 py-1.5 bg-transparent border border-border text-text-primary rounded-lg text-[13px] font-medium hover:bg-bg-card-hover cursor-pointer transition-colors">
-                JSON
+            <div className="flex gap-2">
+              <input
+                type="password"
+                value={apiKey}
+                onChange={(e) => { setApiKey(e.target.value); setKeySaved(false) }}
+                placeholder={t('openai_key_placeholder')}
+                className="flex-1 px-4 py-2.5 glass-input rounded-full text-sm min-h-[44px]"
+              />
+              <button
+                onClick={() => { setOpenAIKey(apiKey); setKeySaved(true) }}
+                className="px-5 py-2.5 btn-brand rounded-full text-sm font-semibold cursor-pointer min-h-[44px]"
+              >
+                {t('save')}
               </button>
             </div>
+            <p className="text-xs text-text-muted mt-2.5 leading-relaxed">{t('openai_key_desc')}</p>
           </div>
-        </div>
+        </Section>
+
+        {/* Data */}
+        <Section title="Data">
+          <div className="flex items-center justify-between px-4 py-3.5 text-[15px] min-h-[52px]">
+            <span className="text-text-primary">{t('export_data')}</span>
+            <button className="px-4 py-1.5 btn-ghost rounded-full text-[13px] font-semibold cursor-pointer min-h-[36px]">
+              JSON
+            </button>
+          </div>
+        </Section>
 
         <button
           onClick={handleLogout}
-          className="w-full py-3 px-6 bg-transparent border border-danger/30 text-danger rounded-lg hover:bg-danger/10 transition-colors cursor-pointer font-medium text-[15px]"
+          className="w-full py-3.5 px-6 bg-transparent border border-[rgba(255,77,77,0.35)] text-danger rounded-full hover:bg-[rgba(255,77,77,0.08)] transition-colors cursor-pointer font-semibold text-[15px] min-h-[48px]"
         >
           {t('logout')}
         </button>
       </div>
     </div>
   )
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="mb-7">
+      <h3 className="text-[11px] font-semibold text-text-muted uppercase tracking-[0.08em] mb-2.5 px-1">
+        {title}
+      </h3>
+      <div className="glass-card overflow-hidden">{children}</div>
+    </div>
+  )
+}
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between px-4 py-3.5 text-[15px] min-h-[52px]">
+      <span className="text-text-primary">{label}</span>
+      <span className="text-text-secondary text-sm truncate ml-3 text-right">{value}</span>
+    </div>
+  )
+}
+
+function Divider() {
+  return <div className="h-px bg-[rgba(123,92,255,0.16)] mx-4" />
 }

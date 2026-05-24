@@ -29,20 +29,26 @@ export function Modal({ open, onClose, title, children, footer, large }: ModalPr
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center animate-fade-in"
+      style={{
+        backgroundColor: 'rgba(8, 8, 18, 0.72)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+      }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
       <div
-        className={`bg-bg-modal rounded-t-2xl sm:rounded-2xl w-full max-w-[480px] flex flex-col animate-slide-up ${
+        className={`glass-card w-full max-w-[480px] flex flex-col animate-slide-up rounded-t-[24px] sm:rounded-[24px] ${
           large ? 'max-h-[92vh]' : 'max-h-[85vh]'
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-border shrink-0">
-          <h2 className="text-lg font-semibold">{title}</h2>
+        <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-[rgba(123,92,255,0.16)] shrink-0">
+          <h2 className="text-[17px] font-semibold tracking-tight">{title}</h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-text-secondary hover:bg-bg-card hover:text-text-primary transition-colors bg-transparent border-none cursor-pointer"
+            aria-label="Luk"
+            className="p-2 rounded-full text-text-secondary hover:bg-white/5 hover:text-text-primary transition-colors bg-transparent border-none cursor-pointer"
           >
             <X size={20} />
           </button>
@@ -55,7 +61,7 @@ export function Modal({ open, onClose, title, children, footer, large }: ModalPr
 
         {/* Footer */}
         {footer && (
-          <div className="flex gap-2.5 px-5 py-4 border-t border-border shrink-0">
+          <div className="flex gap-2.5 px-5 py-4 border-t border-[rgba(123,92,255,0.16)] shrink-0">
             {footer}
           </div>
         )}
